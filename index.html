@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abfallfibel - Waste Disposal Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .highlight {
+            background-color: #fef3c7;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Abfallfibel - Waste Disposal Guide</h1>
+        
+        <div class="mb-6 flex gap-2">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Search waste items..."
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            <button 
+                id="clearButton"
+                class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+            >
+                Clear
+            </button>
+        </div>
+
+        <div class="overflow-x-auto shadow-lg rounded-lg">
+            <table class="min-w-full bg-white">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Name</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Special Waste</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider" colspan="4">Household</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider" colspan="4">Collection Points</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider" colspan="3">Recycling Centers</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Paid</th>
+                    </tr>
+                    <tr class="bg-gray-50">
+                        <th class="px-2 py-2 text-xs font-normal text-gray-600"></th>
+                        <th class="px-2 py-2 text-xs font-normal text-gray-600"></th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Gelber Sack</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Restmüll</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Bio</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Papier</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Glas</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Textil</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Papier/Karton WSZ</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">TKB</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Breitenau</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Schlöglmühl</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Grottendorf</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">ASZ Grüne Tonne</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody" class="divide-y divide-gray-200">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="resultCount" class="mt-4 text-sm text-gray-600 text-center"></div>
+    </div>
+
+    <script>
+        let allItems = [];
+        let filteredItems = [];
+
+        function fuzzySearch(query, text) {
+            query = query.toLowerCase();
+            text = text.toLowerCase();
+            
+            let queryIndex = 0;
+            let textIndex = 0;
+            
+            while (queryIndex < query.length && textIndex < text.length) {
+                if (query[queryIndex] === text[textIndex]) {
+                    queryIndex++;
+                }
+                textIndex++;
+            }
+            
+            return queryIndex === query.length;
+        }
+
+        function highlightMatch(text, query) {
+            if (!query) return text;
+            
+            const lowerText = text.toLowerCase();
+            const lowerQuery = query.toLowerCase();
+            let result = '';
+            let queryIndex = 0;
+            
+            for (let i = 0; i < text.length; i++) {
+                if (queryIndex < lowerQuery.length && lowerText[i] === lowerQuery[queryIndex]) {
+                    result += `<span class="highlight">${text[i]}</span>`;
+                    queryIndex++;
+                } else {
+                    result += text[i];
+                }
+            }
+            
+            return result;
+        }
+
+        function renderTable(items, searchQuery = '') {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            items.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.className = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                
+                const checkMark = '✓';
+                const crossMark = '✗';
+                
+                row.innerHTML = `
+                    <td class="px-4 py-3 text-sm font-medium text-gray-900">${highlightMatch(item.name, searchQuery)}</td>
+                    <td class="px-4 py-3 text-sm text-center">${item.special_waste ? 
+                        '<span class="text-red-600 font-bold">⚠️ Yes</span>' : 
+                        '<span class="text-green-600">No</span>'}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.household.gelber_sack ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.household.restmuell ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.household.bio ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.household.papier ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.collection_points.glas ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.collection_points.textil ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.collection_points.papier_karton_wsz ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.collection_points.tkb ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.recycling_centers.wsz_breitenau ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.recycling_centers.wsz_schloeglmuehl ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.recycling_centers.wsz_grottendorf ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                    <td class="px-2 py-3 text-sm text-center">${item.disposal_locations.paid_collection.asz_gruene_tonne ? 
+                        `<span class="text-green-600 font-bold">${checkMark}</span>` : 
+                        `<span class="text-gray-400">${crossMark}</span>`}</td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            updateResultCount(items.length, allItems.length);
+        }
+
+        function updateResultCount(shown, total) {
+            const resultCount = document.getElementById('resultCount');
+            if (shown === total) {
+                resultCount.textContent = `Showing all ${total} items`;
+            } else {
+                resultCount.textContent = `Showing ${shown} of ${total} items`;
+            }
+        }
+
+        function filterItems(query) {
+            if (!query) {
+                filteredItems = allItems;
+            } else {
+                filteredItems = allItems.filter(item => fuzzySearch(query, item.name));
+            }
+            renderTable(filteredItems, query);
+        }
+
+        async function loadData() {
+            try {
+                // Try to fetch the JSON file
+                const response = await fetch('waste_disposal_data.json');
+                const data = await response.json();
+                allItems = data.waste_items;
+                filteredItems = allItems;
+                renderTable(allItems);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('tableBody').innerHTML = 
+                    `<tr><td colspan="14" class="text-center py-8 text-red-600">
+                        <div class="space-y-4">
+                            <p class="font-bold">Error loading data locally due to CORS restrictions.</p>
+                            <p>To view this page locally, you have 3 options:</p>
+                            <div class="text-left max-w-2xl mx-auto space-y-2">
+                                <p><strong>Option 1:</strong> Use Python's built-in server:<br>
+                                <code class="bg-gray-100 px-2 py-1 rounded">python3 -m http.server 8000</code><br>
+                                Then open <a href="http://localhost:8000" class="text-blue-600 underline">http://localhost:8000</a></p>
+                                
+                                <p><strong>Option 2:</strong> Use Node.js http-server:<br>
+                                <code class="bg-gray-100 px-2 py-1 rounded">npx http-server</code><br>
+                                Then open the provided URL</p>
+                                
+                                <p><strong>Option 3:</strong> Upload to GitHub Pages or any web server</p>
+                            </div>
+                        </div>
+                    </td></tr>`;
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            filterItems(e.target.value);
+        });
+
+        document.getElementById('clearButton').addEventListener('click', () => {
+            document.getElementById('searchInput').value = '';
+            filterItems('');
+        });
+
+        loadData();
+    </script>
+</body>
+</html>
