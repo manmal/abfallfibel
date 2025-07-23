@@ -55,7 +55,7 @@
 
         <!-- Desktop Table View -->
         <div id="desktopView" class="hidden lg:block shadow-lg rounded-lg overflow-hidden">
-            <div class="overflow-y-auto overflow-x-auto" style="max-height: calc(100vh - 320px);">
+            <div id="tableScrollContainer" class="overflow-y-auto overflow-x-auto" style="max-height: calc(100vh - 320px);">
                 <table class="min-w-full bg-white dark:bg-gray-800 relative">
                     <thead class="bg-gray-100 dark:bg-gray-700 sticky top-0 z-20 shadow-md">
                     <tr>
@@ -349,11 +349,25 @@
 
         document.getElementById('searchInput').addEventListener('input', (e) => {
             filterItems(e.target.value);
+            // Scroll table to top for desktop view
+            const tableScrollContainer = document.getElementById('tableScrollContainer');
+            if (tableScrollContainer) {
+                tableScrollContainer.scrollTop = 0;
+            }
+            // Scroll window to top for mobile view
+            window.scrollTo(0, 0);
         });
 
         document.getElementById('clearButton').addEventListener('click', () => {
             document.getElementById('searchInput').value = '';
             filterItems('');
+            // Scroll table to top for desktop view
+            const tableScrollContainer = document.getElementById('tableScrollContainer');
+            if (tableScrollContainer) {
+                tableScrollContainer.scrollTop = 0;
+            }
+            // Scroll window to top for mobile view
+            window.scrollTo(0, 0);
         });
 
         loadData();
