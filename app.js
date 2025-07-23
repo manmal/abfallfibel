@@ -587,6 +587,7 @@ class App {
             this.labelManager.addLabel(labelId, labelName);
             this.searchInput.value = '';
             this.autocompleteManager.hide();
+            this.filterItems('');
         });
 
         this.labelManager = new LabelManager(() => {
