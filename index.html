@@ -15,10 +15,12 @@
             background-color: #fef3c7;
             font-weight: 600;
         }
-        .dark .highlight {
-            background-color: #374151;
-            color: #fbbf24;
-            font-weight: 600;
+        @media (prefers-color-scheme: dark) {
+            .highlight {
+                background-color: #374151;
+                color: #fbbf24;
+                font-weight: 600;
+            }
         }
         /* Ensure sticky positioning works in table */
         #desktopView table {
