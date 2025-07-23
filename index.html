@@ -31,19 +31,26 @@
         <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 lg:mb-8 text-center">Abfallfibel Raum Neunkirchen</h1>
         
         <div class="sticky top-0 z-10 bg-gray-50 dark:bg-gray-900 py-4 -mx-4 px-4 -mt-4 mb-6">
-            <div class="flex gap-2">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="Abfall suchen..."
-                    class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm"
-                >
-                <button 
-                    id="clearButton"
-                    class="px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors shadow-sm"
-                >
-                    Löschen
-                </button>
+            <div class="relative">
+                <div class="flex gap-2">
+                    <div class="flex-1 relative">
+                        <div id="selectedLabels" class="flex flex-wrap gap-2 mb-2 hidden"></div>
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            placeholder="Abfall oder Entsorgungsart suchen..."
+                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-sm"
+                            autocomplete="off"
+                        >
+                        <div id="autocompleteDropdown" class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-64 overflow-y-auto hidden z-50"></div>
+                    </div>
+                    <button 
+                        id="clearButton"
+                        class="px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors shadow-sm"
+                    >
+                        Löschen
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -213,6 +220,23 @@
     <script>
         let allItems = [];
         let filteredItems = [];
+        let selectedLabels = [];
+        
+        // Define all searchable labels with their display names and colors
+        const DISPOSAL_LABELS = [
+            { id: 'gelber_sack', name: 'Gelber Sack', type: 'household' },
+            { id: 'restmuell', name: 'Restmüll', type: 'household' },
+            { id: 'bio', name: 'Bio', type: 'household' },
+            { id: 'papier', name: 'Papier', type: 'household' },
+            { id: 'glas_container', name: 'Glas-Container', type: 'collection' },
+            { id: 'textil_container', name: 'Textil-Container', type: 'collection' },
+            { id: 'papier_karton_wsz', name: 'Papier/Karton WSZ', type: 'collection' },
+            { id: 'tkb', name: 'TKB', type: 'collection' },
+            { id: 'wsz_breitenau', name: 'WSZ Breitenau', type: 'wsz' },
+            { id: 'wsz_schloeglmuehl', name: 'WSZ Schlöglmühl', type: 'wsz' },
+            { id: 'wsz_grottendorf', name: 'WSZ Grottendorf', type: 'wsz' },
+            { id: 'asz_gruene_tonne', name: 'ASZ Grüne Tonne', type: 'paid' }
+        ];
 
         function fuzzySearch(query, text) {
             query = query.toLowerCase();
@@ -307,6 +331,12 @@
                 case 'Papier/Karton WSZ':
                 case 'TKB':
                     return 'bg-green-600 dark:bg-green-700 text-white';
+                case 'WSZ Breitenau':
+                case 'WSZ Schlöglmühl':
+                case 'WSZ Grottendorf':
+                    return 'bg-green-600 dark:bg-green-700 text-white';
+                case 'ASZ Grüne Tonne':
+                    return 'bg-red-600 dark:bg-red-700 text-white';
                 default:
                     // Check if it starts with "WSZ:" for Wertstoffzentren
                     if (option.startsWith('WSZ:')) {
@@ -466,12 +496,134 @@
             }
         }
 
-        function filterItems(query) {
-            if (!query) {
+        function fuzzySearchLabels(query) {
+            if (!query || query.length < 2) return [];
+            
+            return DISPOSAL_LABELS
+                .map(label => ({
+                    label: label,
+                    score: getMatchScore(query, label.name)
+                }))
+                .filter(item => item.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 5)
+                .map(item => item.label);
+        }
+
+        function showAutocomplete(labels) {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            if (labels.length === 0) {
+                dropdown.classList.add('hidden');
+                return;
+            }
+            
+            dropdown.innerHTML = labels.map(label => `
+                <div class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center gap-2" 
+                     onclick="selectLabel('${label.id}', '${label.name}')">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getOptionColorClass(label.name)}">
+                        ${label.name}
+                    </span>
+                </div>
+            `).join('');
+            
+            dropdown.classList.remove('hidden');
+        }
+
+        function hideAutocomplete() {
+            document.getElementById('autocompleteDropdown').classList.add('hidden');
+        }
+
+        function selectLabel(labelId, labelName) {
+            if (!selectedLabels.find(l => l.id === labelId)) {
+                selectedLabels.push({ id: labelId, name: labelName });
+                updateSelectedLabelsDisplay();
+                document.getElementById('searchInput').value = '';
+                filterItemsByLabels();
+            }
+            hideAutocomplete();
+        }
+
+        function removeLabel(labelId) {
+            selectedLabels = selectedLabels.filter(l => l.id !== labelId);
+            updateSelectedLabelsDisplay();
+            filterItemsByLabels();
+        }
+
+        function updateSelectedLabelsDisplay() {
+            const container = document.getElementById('selectedLabels');
+            if (selectedLabels.length === 0) {
+                container.classList.add('hidden');
+                container.innerHTML = '';
+                return;
+            }
+            
+            container.classList.remove('hidden');
+            container.innerHTML = selectedLabels.map(label => `
+                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${getOptionColorClass(label.name)}">
+                    ${label.name}
+                    <button onclick="removeLabel('${label.id}')" class="ml-1 hover:opacity-80">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </span>
+            `).join('');
+        }
+
+        function filterItemsByLabels() {
+            if (selectedLabels.length === 0) {
                 filteredItems = allItems;
             } else {
+                filteredItems = allItems.filter(item => {
+                    return selectedLabels.every(label => {
+                        switch(label.id) {
+                            case 'gelber_sack':
+                                return item.disposal_locations.household.gelber_sack;
+                            case 'restmuell':
+                                return item.disposal_locations.household.restmuell;
+                            case 'bio':
+                                return item.disposal_locations.household.bio;
+                            case 'papier':
+                                return item.disposal_locations.household.papier;
+                            case 'glas_container':
+                                return item.disposal_locations.collection_points.glas;
+                            case 'textil_container':
+                                return item.disposal_locations.collection_points.textil;
+                            case 'papier_karton_wsz':
+                                return item.disposal_locations.collection_points.papier_karton_wsz;
+                            case 'tkb':
+                                return item.disposal_locations.collection_points.tkb;
+                            case 'wsz_breitenau':
+                                return item.disposal_locations.recycling_centers.wsz_breitenau;
+                            case 'wsz_schloeglmuehl':
+                                return item.disposal_locations.recycling_centers.wsz_schloeglmuehl;
+                            case 'wsz_grottendorf':
+                                return item.disposal_locations.recycling_centers.wsz_grottendorf;
+                            case 'asz_gruene_tonne':
+                                return item.disposal_locations.paid_collection.asz_gruene_tonne;
+                            default:
+                                return false;
+                        }
+                    });
+                });
+            }
+            
+            const searchInput = document.getElementById('searchInput').value;
+            if (searchInput) {
+                filterItems(searchInput);
+            } else {
+                render(filteredItems, '');
+            }
+        }
+
+        function filterItems(query) {
+            const itemsToFilter = selectedLabels.length > 0 ? filteredItems : allItems;
+            
+            if (!query) {
+                render(itemsToFilter);
+            } else {
                 // Score and filter items
-                const scoredItems = allItems
+                const scoredItems = itemsToFilter
                     .map(item => ({
                         item: item,
                         score: getMatchScore(query, item.name)
@@ -479,9 +631,8 @@
                     .filter(scored => scored.score > 0)
                     .sort((a, b) => b.score - a.score);
                 
-                filteredItems = scoredItems.map(scored => scored.item);
+                render(scoredItems.map(scored => scored.item), query);
             }
-            render(filteredItems, query);
         }
 
         async function loadData() {
@@ -516,7 +667,19 @@
         }
 
         document.getElementById('searchInput').addEventListener('input', (e) => {
-            filterItems(e.target.value);
+            const query = e.target.value;
+            
+            // Show label autocomplete if searching
+            if (query && selectedLabels.length === 0) {
+                const matchingLabels = fuzzySearchLabels(query);
+                showAutocomplete(matchingLabels);
+            } else {
+                hideAutocomplete();
+            }
+            
+            // Filter items by search query
+            filterItems(query);
+            
             // Scroll table to top for desktop view
             const tableScrollContainer = document.getElementById('tableScrollContainer');
             if (tableScrollContainer) {
@@ -526,9 +689,27 @@
             window.scrollTo(0, 0);
         });
 
+        document.getElementById('searchInput').addEventListener('focus', (e) => {
+            const query = e.target.value;
+            if (query && selectedLabels.length === 0) {
+                const matchingLabels = fuzzySearchLabels(query);
+                showAutocomplete(matchingLabels);
+            }
+        });
+
+        document.getElementById('searchInput').addEventListener('blur', (e) => {
+            // Delay hiding to allow click on dropdown items
+            setTimeout(() => {
+                hideAutocomplete();
+            }, 200);
+        });
+
         document.getElementById('clearButton').addEventListener('click', () => {
             document.getElementById('searchInput').value = '';
+            selectedLabels = [];
+            updateSelectedLabelsDisplay();
             filterItems('');
+            hideAutocomplete();
             // Scroll table to top for desktop view
             const tableScrollContainer = document.getElementById('tableScrollContainer');
             if (tableScrollContainer) {
@@ -537,6 +718,10 @@
             // Scroll window to top for mobile view
             window.scrollTo(0, 0);
         });
+
+        // Make functions globally accessible
+        window.selectLabel = selectLabel;
+        window.removeLabel = removeLabel;
 
         // Modal functions
         function showWszModal() {
