@@ -5,27 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abfallfibel - Entsorgungsratgeber</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'media'
+        }
+    </script>
     <style>
         .highlight {
             background-color: #fef3c7;
             font-weight: 600;
         }
+        .dark .highlight {
+            background-color: #78350f;
+            color: #fef3c7;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
     <div class="container mx-auto px-4 py-8 max-w-7xl">
-        <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-6 lg:mb-8 text-center">Abfallfibel - Entsorgungsratgeber</h1>
+        <h1 class="text-2xl lg:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 lg:mb-8 text-center">Abfallfibel - Entsorgungsratgeber</h1>
         
         <div class="mb-6 flex gap-2">
             <input 
                 type="text" 
                 id="searchInput" 
                 placeholder="Abfall suchen..."
-                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
             >
             <button 
                 id="clearButton"
-                class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                class="px-4 py-2 bg-gray-500 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-600 dark:hover:bg-gray-700 transition-colors"
             >
                 Löschen
             </button>
@@ -39,39 +48,39 @@
 
         <!-- Desktop Table View -->
         <div id="desktopView" class="hidden lg:block overflow-x-auto shadow-lg rounded-lg">
-            <table class="min-w-full bg-white">
-                <thead class="bg-gray-100">
+            <table class="min-w-full bg-white dark:bg-gray-800">
+                <thead class="bg-gray-100 dark:bg-gray-700">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Bezeichnung</th>
-                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Sonderabfall</th>
-                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider" colspan="4">Haushalt</th>
-                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider" colspan="4">Sammelstellen</th>
-                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider" colspan="3">Wertstoffzentren</th>
-                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Kostenpflichtig</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Bezeichnung</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Sonderabfall</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider" colspan="4">Haushalt</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider" colspan="4">Sammelstellen</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider" colspan="3">Wertstoffzentren</th>
+                        <th class="px-4 py-3 text-center text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">Kostenpflichtig</th>
                     </tr>
-                    <tr class="bg-gray-50">
-                        <th class="px-2 py-2 text-xs font-normal text-gray-600"></th>
-                        <th class="px-2 py-2 text-xs font-normal text-gray-600"></th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Gelber Sack</th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Restmüll</th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Bio</th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Papier</th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Glas</th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Textil</th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Papier/Karton WSZ</th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">TKB</th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Breitenau</th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Schlöglmühl</th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">Grottendorf</th>
-                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600">ASZ Grüne Tonne</th>
+                    <tr class="bg-gray-50 dark:bg-gray-800">
+                        <th class="px-2 py-2 text-xs font-normal text-gray-600 dark:text-gray-400"></th>
+                        <th class="px-2 py-2 text-xs font-normal text-gray-600 dark:text-gray-400"></th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">Gelber Sack</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">Restmüll</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">Bio</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">Papier</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">Glas</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">Textil</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">Papier/Karton WSZ</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">TKB</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">Breitenau</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">Schlöglmühl</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">Grottendorf</th>
+                        <th class="px-2 py-2 text-center text-xs font-normal text-gray-600 dark:text-gray-400">ASZ Grüne Tonne</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody" class="divide-y divide-gray-200">
+                <tbody id="tableBody" class="divide-y divide-gray-200 dark:divide-gray-700">
                 </tbody>
             </table>
         </div>
 
-        <div id="resultCount" class="mt-4 text-sm text-gray-600 text-center"></div>
+        <div id="resultCount" class="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center"></div>
     </div>
 
     <script>
@@ -115,13 +124,37 @@
             return result;
         }
 
+        function getOptionColorClass(option) {
+            switch(option) {
+                case 'Gelber Sack':
+                    return 'bg-yellow-400 dark:bg-yellow-600 text-gray-900 dark:text-gray-100';
+                case 'Restmüll':
+                    return 'bg-gray-700 dark:bg-gray-600 text-white';
+                case 'Bio':
+                    return 'bg-amber-700 dark:bg-amber-800 text-white';
+                case 'Papier':
+                    return 'bg-red-900 dark:bg-red-800 text-white';
+                case 'Glas-Container':
+                case 'Textil-Container':
+                case 'Papier/Karton WSZ':
+                case 'TKB':
+                    return 'bg-green-600 dark:bg-green-700 text-white';
+                default:
+                    // Check if it starts with "WSZ:" for Wertstoffzentren
+                    if (option.startsWith('WSZ:')) {
+                        return 'bg-green-600 dark:bg-green-700 text-white';
+                    }
+                    return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
+            }
+        }
+
         function renderMobileCards(items, searchQuery = '') {
             const mobileCards = document.getElementById('mobileCards');
             mobileCards.innerHTML = '';
             
             items.forEach((item) => {
                 const card = document.createElement('div');
-                card.className = 'bg-white rounded-lg shadow-md p-4 space-y-3';
+                card.className = 'bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900 p-4 space-y-3';
                 
                 const activeOptions = [];
                 
@@ -143,9 +176,14 @@
                 if (item.disposal_locations.recycling_centers.wsz_schloeglmuehl) wertstoffzentren.push('Schlöglmühl');
                 if (item.disposal_locations.recycling_centers.wsz_grottendorf) wertstoffzentren.push('Grottendorf');
                 
+                // Add WSZ label to wertstoffzentren options
+                if (wertstoffzentren.length > 0) {
+                    activeOptions.push(`WSZ: ${wertstoffzentren.join(', ')}`);
+                }
+                
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
-                        <h3 class="text-lg font-semibold text-gray-900">${highlightMatch(item.name, searchQuery)}</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">${highlightMatch(item.name, searchQuery)}</h3>
                         ${item.special_waste ? 
                             '<span class="text-red-600 font-bold text-sm">⚠️ Sonderabfall</span>' : 
                             ''}
@@ -153,10 +191,10 @@
                     
                     ${activeOptions.length > 0 ? `
                         <div class="space-y-2">
-                            <p class="text-sm font-medium text-gray-700">Entsorgung:</p>
+                            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Entsorgung:</p>
                             <div class="flex flex-wrap gap-2">
                                 ${activeOptions.map(option => 
-                                    `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getOptionColorClass(option)}">
                                         ${option}
                                     </span>`
                                 ).join('')}
@@ -164,16 +202,10 @@
                         </div>
                     ` : ''}
                     
-                    ${wertstoffzentren.length > 0 ? `
-                        <div class="space-y-1">
-                            <p class="text-sm font-medium text-gray-700">Wertstoffzentren:</p>
-                            <p class="text-sm text-gray-600">${wertstoffzentren.join(', ')}</p>
-                        </div>
-                    ` : ''}
                     
                     ${item.disposal_locations.paid_collection.asz_gruene_tonne ? `
-                        <div class="pt-2 border-t border-gray-200">
-                            <span class="text-sm text-orange-600 font-medium">💰 Kostenpflichtige Entsorgung (ASZ Grüne Tonne)</span>
+                        <div class="pt-2 border-t border-gray-200 dark:border-gray-700">
+                            <span class="text-sm text-red-500 dark:text-red-400 font-medium">💰 Kostenpflichtige Entsorgung (ASZ Grüne Tonne)</span>
                         </div>
                     ` : ''}
                 `;
@@ -188,13 +220,13 @@
             
             items.forEach((item, index) => {
                 const row = document.createElement('tr');
-                row.className = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                row.className = index % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900';
                 
                 const checkMark = '✓';
                 const crossMark = '✗';
                 
                 row.innerHTML = `
-                    <td class="px-4 py-3 text-sm font-medium text-gray-900">${highlightMatch(item.name, searchQuery)}</td>
+                    <td class="px-4 py-3 text-sm font-medium text-gray-900 dark:text-gray-100">${highlightMatch(item.name, searchQuery)}</td>
                     <td class="px-4 py-3 text-sm text-center">${item.special_waste ? 
                         '<span class="text-red-600 font-bold">⚠️ Ja</span>' : 
                         '<span class="text-green-600">Nein</span>'}</td>
@@ -275,17 +307,17 @@
             } catch (error) {
                 console.error('Error loading data:', error);
                 document.getElementById('tableBody').innerHTML = 
-                    `<tr><td colspan="14" class="text-center py-8 text-red-600">
+                    `<tr><td colspan="14" class="text-center py-8 text-red-600 dark:text-red-400">
                         <div class="space-y-4">
                             <p class="font-bold">Fehler beim lokalen Laden der Daten aufgrund von CORS-Beschränkungen.</p>
                             <p>Um diese Seite lokal anzuzeigen, haben Sie 3 Optionen:</p>
                             <div class="text-left max-w-2xl mx-auto space-y-2">
                                 <p><strong>Option 1:</strong> Verwenden Sie Pythons eingebauten Server:<br>
-                                <code class="bg-gray-100 px-2 py-1 rounded">python3 -m http.server 8000</code><br>
+                                <code class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">python3 -m http.server 8000</code><br>
                                 Dann öffnen Sie <a href="http://localhost:8000" class="text-blue-600 underline">http://localhost:8000</a></p>
                                 
                                 <p><strong>Option 2:</strong> Verwenden Sie Node.js http-server:<br>
-                                <code class="bg-gray-100 px-2 py-1 rounded">npx http-server</code><br>
+                                <code class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">npx http-server</code><br>
                                 Dann öffnen Sie die angezeigte URL</p>
                                 
                                 <p><strong>Option 3:</strong> Hochladen auf GitHub Pages oder einen beliebigen Webserver</p>
