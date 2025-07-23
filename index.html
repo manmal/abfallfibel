@@ -103,6 +103,105 @@
         </div>
     </div>
 
+    <!-- WSZ Modal -->
+    <div id="wszModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4" onclick="hideWszModal(event)">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Wertstoffzentren (WSZ)</h2>
+                <button onclick="hideWszModal()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="overflow-y-auto p-6 space-y-8" style="max-height: calc(90vh - 100px);">
+                <!-- WSZ Breitenau -->
+                <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-green-700 dark:text-green-400">WSZ Breitenau</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300">📍 Adresse</h4>
+                            <p class="text-gray-600 dark:text-gray-400">an der B17, 2624 Breitenau</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300">📞 Telefon</h4>
+                            <a href="tel:0263564751" class="text-blue-600 dark:text-blue-400 hover:underline">02635 64751</a>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300">🕐 Öffnungszeiten</h4>
+                            <div class="text-gray-600 dark:text-gray-400">
+                                <p><strong>Montag:</strong> 07:00 – 16:00*</p>
+                                <p><strong>Dienstag:</strong> 07:00 – 16:00*</p>
+                                <p><strong>Mittwoch:</strong> Geschlossen</p>
+                                <p><strong>Donnerstag:</strong> 07:00 – 19:00*</p>
+                                <p><strong>Freitag:</strong> 07:00 – 16:00*</p>
+                                <p class="mt-2 text-green-600 dark:text-green-400"><strong>Grünschnitt:</strong> Mo-So 07:00 – 20:00</p>
+                            </div>
+                        </div>
+                        <div class="mt-3 p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+                            <p class="text-sm text-yellow-800 dark:text-yellow-200">⚠️ <strong>Achtung:</strong> Einfahrt spätestens 15 Minuten vor Schließzeit!</p>
+                        </div>
+                        <a href="https://neunkirchen.umweltverbaende.at/informationen-zu-abfall/wertstoffzentren/uebersicht/wsz-breitenau/" target="_blank" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline text-sm mt-2">
+                            Weitere Infos →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- WSZ Schlöglmühl -->
+                <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-green-700 dark:text-green-400">WSZ Schlöglmühl</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300">📍 Adresse</h4>
+                            <p class="text-gray-600 dark:text-gray-400">Schlöglmühl 5, 2640 Payerbach</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-500">(Am Standort der FCC Neunkirchen Abfall Service GmbH)</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300">🕐 Öffnungszeiten</h4>
+                            <div class="text-gray-600 dark:text-gray-400">
+                                <p><strong>Dienstag:</strong> 07:00 – 18:00*</p>
+                                <p><strong>Freitag:</strong> 07:00 – 18:00*</p>
+                                <p class="mt-2 text-green-600 dark:text-green-400"><strong>Grünschnitt:</strong> Mo-So 07:00 – 20:00</p>
+                            </div>
+                        </div>
+                        <div class="mt-3 p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+                            <p class="text-sm text-yellow-800 dark:text-yellow-200">⚠️ <strong>Achtung:</strong> Einfahrt spätestens 15 Minuten vor Schließzeit!</p>
+                        </div>
+                        <a href="https://neunkirchen.umweltverbaende.at/informationen-zu-abfall/wertstoffzentren/uebersicht/wsz-schloeglmuehl/" target="_blank" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline text-sm mt-2">
+                            Weitere Infos →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- WSZ Grottendorf -->
+                <div class="bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-green-700 dark:text-green-400">WSZ Grottendorf</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300">📍 Adresse</h4>
+                            <p class="text-gray-600 dark:text-gray-400">Grottendorf 51, 2873 Feistritz am Wechsel</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-500">(Neben der Kläranlage an der B54)</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 dark:text-gray-300">🕐 Öffnungszeiten</h4>
+                            <div class="text-gray-600 dark:text-gray-400">
+                                <p><strong>Mittwoch:</strong> 07:00 – 18:00*</p>
+                                <p><strong>Freitag:</strong> 07:00 – 18:00*</p>
+                                <p class="mt-2 text-green-600 dark:text-green-400"><strong>Grünschnitt:</strong> Mo-So 07:00 – 20:00</p>
+                            </div>
+                        </div>
+                        <div class="mt-3 p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+                            <p class="text-sm text-yellow-800 dark:text-yellow-200">⚠️ <strong>Achtung:</strong> Einfahrt spätestens 15 Minuten vor Schließzeit!</p>
+                        </div>
+                        <a href="https://neunkirchen.umweltverbaende.at/informationen-zu-abfall/wertstoffzentren/uebersicht/wsz-grottendorf/" target="_blank" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline text-sm mt-2">
+                            Weitere Infos →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         let allItems = [];
         let filteredItems = [];
@@ -198,7 +297,11 @@
                 
                 // Add WSZ label to wertstoffzentren options
                 if (wertstoffzentren.length > 0) {
-                    activeOptions.push(`WSZ: ${wertstoffzentren.join(', ')}`);
+                    activeOptions.push({
+                        type: 'wsz',
+                        label: `WSZ: ${wertstoffzentren.join(', ')}`,
+                        centers: wertstoffzentren
+                    });
                 }
                 
                 card.innerHTML = `
@@ -213,11 +316,18 @@
                         <div class="space-y-2">
                             <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Entsorgung:</p>
                             <div class="flex flex-wrap gap-2">
-                                ${activeOptions.map(option => 
-                                    `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getOptionColorClass(option)}">
-                                        ${option}
-                                    </span>`
-                                ).join('')}
+                                ${activeOptions.map(option => {
+                                    if (typeof option === 'object' && option.type === 'wsz') {
+                                        return `<button onclick="showWszModal()" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getOptionColorClass(option.label)} hover:shadow-lg transition-shadow cursor-pointer">
+                                            ${option.label}
+                                            <span class="ml-2 px-1.5 py-0.5 text-xs rounded-full border border-current">Wo?</span>
+                                        </button>`;
+                                    } else {
+                                        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getOptionColorClass(option)}">
+                                            ${option}
+                                        </span>`;
+                                    }
+                                }).join('')}
                             </div>
                         </div>
                     ` : ''}
@@ -368,6 +478,26 @@
             }
             // Scroll window to top for mobile view
             window.scrollTo(0, 0);
+        });
+
+        // Modal functions
+        function showWszModal() {
+            document.getElementById('wszModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideWszModal(event) {
+            if (!event || event.target.id === 'wszModal') {
+                document.getElementById('wszModal').classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // ESC key to close modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideWszModal();
+            }
         });
 
         loadData();
