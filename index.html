@@ -11,17 +11,6 @@
         }
     </script>
     <style>
-        .highlight {
-            background-color: #fef3c7;
-            font-weight: 600;
-        }
-        @media (prefers-color-scheme: dark) {
-            .highlight {
-                background-color: #374151;
-                color: #fbbf24;
-                font-weight: 600;
-            }
-        }
         /* Ensure sticky positioning works in table */
         #desktopView table {
             position: relative;
@@ -141,7 +130,7 @@
             
             for (let i = 0; i < text.length; i++) {
                 if (queryIndex < lowerQuery.length && lowerText[i] === lowerQuery[queryIndex]) {
-                    result += `<span class="highlight">${text[i]}</span>`;
+                    result += `<span class="bg-yellow-200 dark:bg-gray-700 dark:text-yellow-400 font-semibold">${text[i]}</span>`;
                     queryIndex++;
                 } else {
                     result += text[i];
